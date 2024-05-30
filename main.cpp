@@ -102,76 +102,11 @@ public:
         }
 
     }
-
-
-    void merge(int* arr, int left[], int left_size, int right[], int right_size) {
-        int i = 0, j = 0, k = 0;
-        //меньший элемент из left[i] и right[j] добавляется в массив arr на позицию k, и соответствующий индекс увеличивается
-        while (i < left_size && j < right_size) {
-            if (left[i] <= right[j]) {
-                arr[k++] = left[i++];
-            }
-            else {
-                arr[k++] = right[j++];
-            }
-        }
-        //если один из массивов left или right закончился, оставшиеся элементы из другого массива просто добавляются в конец массива arr
-        while (i < left_size) {
-            arr[k++] = left[i++];
-        }
-        while (j < right_size) {
-            arr[k++] = right[j++];
-        }
-    }
-
-    void natural_two_way_merge_sort(int* arr, int size) {
-        if (size <= 1) {
-            return;
-        }
-        int mid = size / 2;
-        int* left = new int[mid];
-        int* right = new int[size - mid];
-        for (int i = 0; i < mid; i++) {
-            left[i] = arr[i];
-        }
-        for (int i = mid; i < size; i++) {
-            right[i - mid] = arr[i];
-        }
-        natural_two_way_merge_sort(left, mid);
-        natural_two_way_merge_sort(right, size - mid);
-        merge(arr, left, mid, right, size - mid);
-    }
-
-    void ArrayThroughStack() {
-        int size = 0;
-        std::stack<int> tempStack;
-        while (!isEmpty()) {
-            tempStack.push(top());
-            pop();
-            size++;
-        }
-
-        int* temp = new int[size];
-        int i = 0;
-        while (!tempStack.empty()) {
-            temp[i++] = tempStack.top();
-            tempStack.pop();
-        }
-        natural_two_way_merge_sort(temp, size);
-
-        for (int j = size - 1; j >= 0; --j) {
-            push(temp[j]);
-        }
-
-        delete[] temp;
-    }
-};
-
-void Sort(Numbers *temp, int size) {
+void Sort(int size) {
     //Numbers keys;
     Numbers arr;
     for (int i = size-1; i >= 0; --i) {
-        arr.push(temp->GetValue(i));
+        arr.push(GetValue(i));
     }
     //cout<<arr.GetValue(0)<< ' '<< arr.GetValue(9)<<'\n';
     /*for (int i = 0; i < size; ++i) {
@@ -294,9 +229,14 @@ void Sort(Numbers *temp, int size) {
         }
     } while (f == 0);
 
-    // for (int i = 0; i <size; i++)
-    //     cout << arr.GetValue(i) << " ";
+    for (int i = 0; i < size; i++) {
+        SetValue(i, arr.GetValue(i), size);
+    }
 }
+
+};
+
+
 
 
 
@@ -325,7 +265,7 @@ int main() {
     }
     cout<<"\n";
     //Stack1.ArrayThroughStack();
-    Sort(&Stack1, 5);
+    Stack1.Sort(10);
     //cout << "New Stack1: ";
     while (!Stack1.isEmpty()) {
         std::cout << Stack1.top() << " ";
@@ -344,7 +284,7 @@ int main() {
         }
         cout << "\n";
         auto start = chrono::high_resolution_clock::now();
-        Stack.ArrayThroughStack();
+        Stack.Sort(size);
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> elapsed = end - start;
         cout << "Сортировка " << size << " элементов заняла: " << elapsed.count() << " мс";
