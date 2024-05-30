@@ -72,8 +72,6 @@ public:
             tmp.push(t);
         }
         ret = top();
-        pop();
-        push(ret);
         while(!tmp.isEmpty()){
             int temp = tmp.top();
             tmp.pop();
@@ -170,65 +168,137 @@ public:
 };
 
 void Sort(Numbers *temp, int size) {
-    Numbers stack;
-
-    for (int i = 0; i < size; ++i) {
-        stack.push(temp->GetValue(i));
+    //Numbers keys;
+    Numbers arr;
+    for (int i = size-1; i >= 0; --i) {
+        arr.push(temp->GetValue(i));
     }
+    //cout<<arr.GetValue(0)<< ' '<< arr.GetValue(9)<<'\n';
+    /*for (int i = 0; i < size; ++i) {
+        keys.push(temp->GetValue(i));
+    }*/
+    bool flag1 = true;
+    bool flag2 = true;
+    bool flag3 = true;
+    //int *arr = new int[size * 2];
 
-    int s = 1;
-
-    s = 1 - s;
-    int d = 1;
-
-    int i, j, k, g;
-    if (s == 0) {
-        i = 1;
-        j = size / 2;
-        k = size / 2 + 1;
-        g = 2 * size / 2;
-    } else {
-        i = size / 2 + 1;
-        j = size - 1;
-        k = 1;
-        g = size / 2;
-    }
-
-    while (i != j) {
-        if (stack.GetValue(i) > stack.GetValue(j)) {
-            temp->SetValue(k, temp->GetValue(j), size);
-            k += d;
-            j--;
-            if (stack.GetValue(j + 1) > stack.GetValue(j)) {
-                do {
-                    temp->SetValue(k, temp->GetValue(i), size);
-                    k += d;
-                    i++;
-                } while (temp->GetValue(i - 1) < temp->GetValue(i));
-                d = -d;
-                int p = k;
-                k = g;
-                g = p;
-            }
-        } else {
-            temp->SetValue(k, temp->GetValue(i), size);
-            k += d;
-            i++;
-            if (stack.GetValue(i + 1) > stack.GetValue(i)) {
-                do {
-                    temp->SetValue(k, temp->GetValue(j), size);
-                    k += d;
-                    j--;
-                } while (temp->GetValue(j + 1) < temp->GetValue(j));
-                d = -d;
-                int p = k;
-                k = g;
-                g = p;
+    int f, s, d, i, j, k, l;
+    s = 0;
+    do {
+        flag2 = true;
+        if (s == 0) {
+            i = 0;
+            j = size - 1;
+            k = size;
+            l = (2 * size) - 1;
+        }
+        if (s == 1) {
+            i = size;
+            j = (2 * size) - 1;
+            k = 0;
+            l = size - 1;
+        }
+        d = 1;
+        f = 1;
+        if ((arr.GetValue(i) <= arr.GetValue(j) && i != j) || arr.GetValue(i) > arr.GetValue(j)) {
+            //if (((arr[i] <= arr[j])&&(i!=j))|| (arr[i] > arr[j])) {
+            do {
+                if (arr.GetValue(i) <= arr.GetValue(j) && i != j) {
+                    if (arr.GetValue(i) <= arr.GetValue(j) && i != j)
+                        //if (arr[i] <= arr[j] && i != j) {
+                        do {
+                            flag3 = true;
+                            flag1 = true;
+                            int t = arr.GetValue(i);
+                            arr.SetValue(k, t, size);
+                            //arr[k] = arr[i];
+                            k += d;
+                            i++;
+                            if (i > size - 1 || arr.GetValue(i - 1) <= arr.GetValue(i)) {
+                                //if (arr[i - 1] <= arr[i]) {
+                                flag3 = false;
+                                break;
+                            }
+                            do {
+                                int t = arr.GetValue(j);
+                                arr.SetValue(k, t, size);
+                                //arr[k] = arr[j];
+                                k += d;
+                                j--;
+                                if (j < 0 || arr.GetValue(j + 1) <= arr.GetValue(j))continue;
+                                //if (arr[j + 1] <= arr[j])continue;
+                                else {
+                                    flag1 = false;
+                                    flag3 = false;
+                                    f = 0;
+                                    d = -d;
+                                    int ser = k;
+                                    k = l;
+                                    l = ser;
+                                    break;
+                                }
+                            } while (flag1);
+                        } while (flag3);
+                }
+                if (arr.GetValue(i) > arr.GetValue(j)) {
+                    //if (arr[i] > arr[j]) {
+                    do {
+                        flag3 = true;
+                        flag1 = true;
+                        int t= arr.GetValue(j);
+                        arr.SetValue(k, t, size);
+                        //arr[k] = arr[j];
+                        k += d;
+                        j--;
+                        if (j < 0 || arr.GetValue(j + 1) <= arr.GetValue(j)) {
+                            //if (arr[j + 1] <= arr[j]) {
+                            flag3 = false;
+                            break;
+                        }
+                        do {
+                            int t = arr.GetValue(i);
+                            arr.SetValue(k, t, size);
+                            //arr[k] = arr[i];
+                            k += d;
+                            i++;
+                            if (arr.GetValue(i - 1) <= arr.GetValue(i)) continue;
+                            //if (arr[i - 1] <= arr[i])continue;
+                            else {
+                                flag1 = false;
+                                flag3 = false;
+                                f = 0;
+                                d = -d;
+                                int ser = k;
+                                k = l;
+                                l = ser;
+                                break;
+                            }
+                        } while (flag1);
+                    } while (flag3);
+                }
+                if (i == j) {
+                    flag2 = false;
+                    break;
+                }
+            } while (flag2);
+        }
+        if (i == j) {
+            int t = arr.GetValue(i);
+            arr.SetValue(k, t, size);
+            //arr[k] = arr[i];
+            if (f == 0) {
+                s = 1 - s;
+            } else {
+                break;
             }
         }
-    }
-    //temp->SetValue(temp->GetValue(i),k,size);
+    } while (f == 0);
+
+    // for (int i = 0; i <size; i++)
+    //     cout << arr.GetValue(i) << " ";
 }
+
+
 
 int main() {
     setlocale(LC_ALL, "Russian");
@@ -239,37 +309,37 @@ int main() {
         Stack1.push(num);
         oldStack.push(num);
     }
-
-    cout << "Old Stack1: ";
-    Stack1.SetValue(1,1000,10);
-    Stack1.SetValue(2,1000,10);
-    Stack1.SetValue(3,1000,10);
-    for(int i =0; i<10;++i) {
-        cout << Stack1.GetValue(i) << " ";
+    for (int i = 0; i < 10; ++i) {
+        Stack1.SetValue(i,i,10);
     }
+
+    //cout << "Old Stack1: \n";
+
+    /*for(int i =0; i<10;++i) {
+        cout << Stack1.GetValue(i) << " ";
+    }*/
     cout<<"\n";
 
-    while (!oldStack.empty()) {
-        cout << oldStack.top() << " ";
-        oldStack.pop();
+    for(int i =0; i <10;++i) {
+        cout<< Stack1.GetValue(i)<< ' ';
     }
-    cout << "\n";
+    cout<<"\n";
     //Stack1.ArrayThroughStack();
-    Sort(&Stack1, 10);
-    cout << "New Stack1: ";
+    Sort(&Stack1, 5);
+    //cout << "New Stack1: ";
     while (!Stack1.isEmpty()) {
         std::cout << Stack1.top() << " ";
         Stack1.pop();
     }
-    cout << "\n";
+
     Numbers Stack;
     int key[1000];
     for (int i = 0; i <= 1000-1; ++i) {
         key[i] = rand() % 1000;
     }
-    int n = 100;
-    while (n != 1100) {
-        for (int i = 0; i != n; ++i) {
+    int size = 100;
+    while (size != 1100) {
+        for (int i = 0; i != size; ++i) {
             Stack.push(key[i]);
         }
         cout << "\n";
@@ -277,12 +347,12 @@ int main() {
         Stack.ArrayThroughStack();
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> elapsed = end - start;
-        cout << "Сортировка " << n << " элементов заняла: " << elapsed.count() << " мс\n";
-        /*for (int i = 0; i != n; ++i) {
+        cout << "Сортировка " << size << " элементов заняла: " << elapsed.count() << " мс";
+        /*for (int i = 0; i != size; ++i) {
             cout << Stack.top() << " ";
             Stack.pop();
         }*/
-        n += 100;
+        size += 100;
         Stack.clear();
     };
 }
