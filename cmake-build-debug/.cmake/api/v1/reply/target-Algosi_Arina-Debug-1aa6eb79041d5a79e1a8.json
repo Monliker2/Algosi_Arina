@@ -2,10 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Algosi_Arina.exe"
-		},
-		{
-			"path" : "Algosi_Arina.pdb"
+			"path" : "Algosi_Arina"
 		}
 	],
 	"backtrace" : 1,
@@ -68,16 +65,12 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
-				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
 	"name" : "Algosi_Arina",
-	"nameOnDisk" : "Algosi_Arina.exe",
+	"nameOnDisk" : "Algosi_Arina",
 	"paths" : 
 	{
 		"build" : ".",

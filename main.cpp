@@ -1,7 +1,6 @@
 #include <iostream>
 #include <stack>
 #include <chrono>
-#include <windows.h>
 using namespace std;
 
 
@@ -64,6 +63,49 @@ public:
 };
 class Numbers : public CustomStack {
 public:
+    int GetValue(int index) {
+        Numbers tmp;
+        int ret = 0;
+        for(int i = 0; i != index; ++i){
+            int t = top();
+            pop();
+            tmp.push(t);
+        }
+        ret = top();
+        pop();
+        push(ret);
+        while(!tmp.isEmpty()){
+            int temp = tmp.top();
+            tmp.pop();
+            push(temp);
+        }
+        return ret;
+    }
+
+    void SetValue(int index, int value, int size) {
+        Numbers tmp;
+
+        for(int i = 0; i != index; ++i){
+            int t = top();
+            pop();
+            tmp.push(t);
+        }
+        pop();
+        push(value);
+        for(int i = index; i != size; ++i){
+            int t = top();
+            pop();
+            tmp.push(t);
+        }
+        for(int i = 0; i != size; ++i){
+            int t = tmp.top();
+            tmp.pop();
+            push(t);
+        }
+
+    }
+
+
     void merge(int* arr, int left[], int left_size, int right[], int right_size) {
         int i = 0, j = 0, k = 0;
         //меньший элемент из left[i] и right[j] добавляется в массив arr на позицию k, и соответствующий индекс увеличивается
@@ -127,6 +169,47 @@ public:
     }
 };
 
+void Sort(Numbers* stack, int size) {
+    Numbers temp;
+
+    for(int i = 0; i<size;++i) {
+        temp.push(stack->GetValue(i));
+    }
+
+    int s = 1;
+    int f = 1;
+    while (f=1) {
+
+
+        s = 1 - s;
+        int d = 1;
+        f = 1;
+        int i, j, k, g;
+        if (s = 0) {
+            i = 1; j = size; k = size + 1; g = 2* size;
+        }
+        else {
+            i = size+1;
+            j = 2*size;
+            k = 1;
+            g = size;
+        }
+
+        while(i!=j) {
+            if (temp.GetValue(i)> temp.GetValue(j)) {
+                temp.SetValue(k,temp.GetValue(j), size);
+                k += d;
+                j--;
+            }
+            else {
+                temp.SetValue(k,temp.GetValue(i), size);
+                k += d;
+                i++;
+            }
+        }
+    }
+}
+
 int main() {
     setlocale(LC_ALL, "Russian");
     Numbers Stack1;
@@ -138,12 +221,21 @@ int main() {
     }
 
     cout << "Old Stack1: ";
+    Stack1.SetValue(1,1000,10);
+    Stack1.SetValue(2,1000,10);
+    Stack1.SetValue(3,1000,10);
+    for(int i =0; i<10;++i) {
+        cout << Stack1.GetValue(i) << " ";
+    }
+    cout<<"\n";
+
     while (!oldStack.empty()) {
         cout << oldStack.top() << " ";
         oldStack.pop();
     }
     cout << "\n";
-    Stack1.ArrayThroughStack();
+    //Stack1.ArrayThroughStack();
+    Sort(&Stack1, 10);
     cout << "New Stack1: ";
     while (!Stack1.isEmpty()) {
         std::cout << Stack1.top() << " ";
