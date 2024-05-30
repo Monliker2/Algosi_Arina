@@ -95,13 +95,13 @@ public:
             pop();
             tmp.push(t);
         }
-        for(int i = 0; i != size; ++i){
+        for(int i = 0; i != size; ++i) {
             int t = tmp.top();
             tmp.pop();
             push(t);
         }
-
     }
+
 void Sort(int size) {
     //Numbers keys;
     Numbers arr;
@@ -249,15 +249,7 @@ int main() {
         Stack1.push(num);
         oldStack.push(num);
     }
-    for (int i = 0; i < 10; ++i) {
-        Stack1.SetValue(i,i,10);
-    }
 
-    //cout << "Old Stack1: \n";
-
-    /*for(int i =0; i<10;++i) {
-        cout << Stack1.GetValue(i) << " ";
-    }*/
     cout<<"\n";
 
     for(int i =0; i <10;++i) {
@@ -267,9 +259,8 @@ int main() {
     //Stack1.ArrayThroughStack();
     Stack1.Sort(10);
     //cout << "New Stack1: ";
-    while (!Stack1.isEmpty()) {
-        std::cout << Stack1.top() << " ";
-        Stack1.pop();
+    for(int i =0; i <10;++i) {
+        cout<< Stack1.GetValue(i)<< ' ';
     }
 
     Numbers Stack;
