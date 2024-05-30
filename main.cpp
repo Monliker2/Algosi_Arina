@@ -236,6 +236,116 @@ void Sort(int size) {
 
 };
 
+void merge(Numbers &a, int n) {
+    bool flag1 = true;
+    bool flag2 = true;
+    bool flag3 = true;
+    Numbers arr; // временный стек для хранения элементов
+
+    // Копируем элементы из исходного стека в временный стек
+    for (int i = 0; i < n; i++) {
+        arr.push(a.GetValue(i));
+    }
+
+    int f, s, d, i, j, k, l;
+    s = 0;
+    do {
+        flag2 = true;
+        if (s == 0) {
+            i = 0;
+            j = n - 1;
+            k = n;
+            l = (2 * n) - 1;
+        }
+        if (s == 1) {
+            i = n;
+            j = (2 * n) - 1;
+            k = 0;
+            l = n - 1;
+        }
+        d = 1;
+        f = 1;
+        if (((arr.GetValue(i) <= arr.GetValue(j)) && (i != j)) || (arr.GetValue(i) > arr.GetValue(j))) {
+            do {
+                if ((arr.GetValue(i) <= arr.GetValue(j)) && (i != j)) {
+                    do {
+                        flag3 = true;
+                        flag1 = true;
+                        arr.SetValue(k, arr.GetValue(i), 2 * n);
+                        k += d;
+                        i++;
+                        if (arr.GetValue(i - 1) <= arr.GetValue(i)) {
+                            flag3 = false;
+                            break;
+                        }
+                        do {
+                            arr.SetValue(k, arr.GetValue(j), 2 * n);
+                            k += d;
+                            j--;
+                            if (arr.GetValue(j + 1) <= arr.GetValue(j)) continue;
+                            else {
+                                flag1 = false;
+                                flag3 = false;
+                                f = 0;
+                                d = -d;
+                                int ser = k;
+                                k = l;
+                                l = ser;
+                                break;
+                            }
+                        } while (flag1);
+                    } while (flag3);
+                }
+                if (arr.GetValue(i) > arr.GetValue(j)) {
+                    do {
+                        flag3 = true;
+                        flag1 = true;
+                        arr.SetValue(k, arr.GetValue(j), 2 * n);
+                        k += d;
+                        j--;
+                        if (arr.GetValue(j + 1) <= arr.GetValue(j)) {
+                            flag3 = false;
+                            break;
+                        }
+                        do {
+                            arr.SetValue(k, arr.GetValue(i), 2 * n);
+                            k += d;
+                            i++;
+                            if (arr.GetValue(i - 1) <= arr.GetValue(i)) continue;
+                            else {
+                                flag1 = false;
+                                flag3 = false;
+                                f = 0;
+                                d = -d;
+                                int ser = k;
+                                k = l;
+                                l = ser;
+                                break;
+                            }
+                        } while (flag1);
+                    } while (flag3);
+                }
+                if (i == j) {
+                    flag2 = false;
+                    break;
+                }
+            } while (flag2);
+        }
+        if (i == j) {
+            arr.SetValue(k, arr.GetValue(i), 2 * n);
+            if (f == 0) {
+                s = 1 - s;
+            } else {
+                break;
+            }
+        }
+    } while (f == 0);
+
+    // Копируем элементы обратно из временного стека в исходный
+    for (int i = 0; i < 2 * n; i++) {
+        a.SetValue(i, arr.GetValue(i), 2 * n);
+    }
+}
 
 
 
@@ -244,7 +354,7 @@ int main() {
     setlocale(LC_ALL, "Russian");
     Numbers Stack1;
     stack<int> oldStack;
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 100; ++i) {
         int num = rand() % 1000;
         Stack1.push(num);
         oldStack.push(num);
@@ -252,12 +362,13 @@ int main() {
 
     cout<<"\n";
 
-    for(int i =0; i <10;++i) {
+    for(int i =0; i <100;++i) {
         cout<< Stack1.GetValue(i)<< ' ';
     }
     cout<<"\n";
     //Stack1.ArrayThroughStack();
-    Stack1.Sort(10);
+    merge(Stack1, 10);
+    //Stack1.Sort(10);
     //cout << "New Stack1: ";
     for(int i =0; i <10;++i) {
         cout<< Stack1.GetValue(i)<< ' ';
