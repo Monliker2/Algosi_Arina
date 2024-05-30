@@ -169,45 +169,65 @@ public:
     }
 };
 
-void Sort(Numbers* stack, int size) {
-    Numbers temp;
+void Sort(Numbers *temp, int size) {
+    Numbers stack;
 
-    for(int i = 0; i<size;++i) {
-        temp.push(stack->GetValue(i));
+    for (int i = 0; i < size; ++i) {
+        stack.push(temp->GetValue(i));
     }
 
     int s = 1;
-    int f = 1;
-    while (f=1) {
 
+    s = 1 - s;
+    int d = 1;
 
-        s = 1 - s;
-        int d = 1;
-        f = 1;
-        int i, j, k, g;
-        if (s = 0) {
-            i = 1; j = size; k = size + 1; g = 2* size;
-        }
-        else {
-            i = size+1;
-            j = 2*size;
-            k = 1;
-            g = size;
-        }
+    int i, j, k, g;
+    if (s == 0) {
+        i = 1;
+        j = size / 2;
+        k = size / 2 + 1;
+        g = 2 * size / 2;
+    } else {
+        i = size / 2 + 1;
+        j = size - 1;
+        k = 1;
+        g = size / 2;
+    }
 
-        while(i!=j) {
-            if (temp.GetValue(i)> temp.GetValue(j)) {
-                temp.SetValue(k,temp.GetValue(j), size);
-                k += d;
-                j--;
+    while (i != j) {
+        if (stack.GetValue(i) > stack.GetValue(j)) {
+            temp->SetValue(k, temp->GetValue(j), size);
+            k += d;
+            j--;
+            if (stack.GetValue(j + 1) > stack.GetValue(j)) {
+                do {
+                    temp->SetValue(k, temp->GetValue(i), size);
+                    k += d;
+                    i++;
+                } while (temp->GetValue(i - 1) < temp->GetValue(i));
+                d = -d;
+                int p = k;
+                k = g;
+                g = p;
             }
-            else {
-                temp.SetValue(k,temp.GetValue(i), size);
-                k += d;
-                i++;
+        } else {
+            temp->SetValue(k, temp->GetValue(i), size);
+            k += d;
+            i++;
+            if (stack.GetValue(i + 1) > stack.GetValue(i)) {
+                do {
+                    temp->SetValue(k, temp->GetValue(j), size);
+                    k += d;
+                    j--;
+                } while (temp->GetValue(j + 1) < temp->GetValue(j));
+                d = -d;
+                int p = k;
+                k = g;
+                g = p;
             }
         }
     }
+    //temp->SetValue(temp->GetValue(i),k,size);
 }
 
 int main() {
